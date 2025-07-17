@@ -3,9 +3,8 @@
 <head>
     <title>Interactive PyScript Code Runner</title>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="https://pyscript.net/latest/core.css" />
-    <script type="module" src="https://pyscript.net/latest/core.js"></script>
-
+    <link rel="stylesheet" href="https://pyscript.net/releases/2023.11.1/core.css" />
+    <script type="module" src="https://pyscript.net/releases/2023.11.1/core.js"></script>
     <style>
         body { font-family: sans-serif; margin: 20px; }
         textarea {
@@ -22,7 +21,7 @@
             background-color: #007bff;
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 5_px;
             cursor: pointer;
         }
         button:hover { background-color: #0056b3; }
@@ -31,8 +30,8 @@
             padding: 15px;
             border: 1px solid #ddd;
             border-radius: 5px;
-            white-space: pre-wrap; /* Ensures long lines wrap */
-            word-wrap: break-word; /* Ensures long words wrap */
+            white-space: pre-wrap;
+            word-wrap: break-word;
             margin-top: 20px;
         }
         .error {
@@ -81,41 +80,31 @@ print("This is a simple print statement.")
     <script type="py">
         import sys
         from io import StringIO
-        from js import document, console # Import document and console for DOM and logging
+        from js import document, console
 
         def run_user_code():
-            # Get the code from the textarea
             code_input_element = document.getElementById('python-code-input')
             user_code = code_input_element.value
 
-            # Get the output area element
             output_area = document.getElementById('output-area')
-            output_area.className = "" # Clear any previous error classes
-            output_area.innerHTML = "Running code..." # Show running message
+            output_area.className = ""
+            output_area.innerHTML = "Running code..."
 
-            # Redirect stdout to capture print statements
             old_stdout = sys.stdout
             redirected_output = StringIO()
             sys.stdout = redirected_output
 
             try:
-                # Execute the user's code
-                # We use exec() to run the string as Python code
                 exec(user_code)
                 captured_output = redirected_output.getvalue()
-                output_area.innerHTML = captured_output # Display captured output
+                output_area.innerHTML = captured_output
             except Exception as e:
-                # Catch any errors during execution and display them
                 error_message = f"<span class='error'>Error:</span>\n{e}"
                 output_area.innerHTML = error_message
-                output_area.className = "error" # Add an error class for styling
-                console.error("PyScript execution error:", e) # Also log to console for debugging
+                output_area.className = "error"
+                console.error("PyScript execution error:", e)
             finally:
-                # Always restore stdout
                 sys.stdout = old_stdout
-
-            # Ensure any console output from the original print() is flushed
-            # console.log("Code execution finished.")
 
     </script>
 </body>
