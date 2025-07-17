@@ -3,41 +3,10 @@
 <head>
     <title>Interactive PyScript Code Runner</title>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="https://pyscript.net/releases/2023.11.1/core.css" />
-    <script type="module" src="https://pyscript.net/releases/2023.11.1/core.js"></script>
+    <link rel="stylesheet" href="https://pyscript.net/releases/2024.3.1/core.css" />
+    <script type="module" src="https://pyscript.net/releases/2024.3.1/core.js"></script>
     <style>
-        body { font-family: sans-serif; margin: 20px; }
-        textarea {
-            width: 80%;
-            height: 200px;
-            padding: 10px;
-            font-family: monospace;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            margin-bottom: 10px;
-        }
-        button {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5_px;
-            cursor: pointer;
-        }
-        button:hover { background-color: #0056b3; }
-        pre {
-            background-color: #f0f0f0;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            margin-top: 20px;
-        }
-        .error {
-            color: red;
-            font-weight: bold;
-        }
+        /* ... your existing CSS ... */
     </style>
 
     <py-config>
@@ -45,31 +14,10 @@
     </py-config>
 </head>
 <body>
-    <h1>Run Your Python Code test</h1>
-
+    <h1>Run Your Python Code wwe</h1>
     <p>Enter your Python code below. Use `print()` to see output.</p>
-
     <textarea id="python-code-input">
-# Example: Run an ANOVA test
-from scipy.stats import f_oneway
-import numpy as np
-
-group_a = np.array([60, 65, 70, 75, 80])
-group_b = np.array([55, 60, 65, 70, 75])
-group_c = np.array([70, 75, 80, 85, 90])
-
-f_statistic, p_value = f_oneway(group_a, group_b, group_c)
-
-print("<h2>ANOVA Test Results:</h2>")
-print(f"<p><strong>Group A Data:</strong> {group_a}</p>")
-print(f"<p><strong>Group B Data:</strong> {group_b}</p>")
-print(f"<p><strong>Group C Data:</strong> {group_c}</p>")
-print(f"<p><strong>F-statistic:</strong> {f_statistic:.2f}</p>")
-print(f"<p><strong>P-value:</strong> {p_value:.3f}</p>")
-
-# Example: Simple print
-print("\nHello from PyScript!")
-print("This is a simple print statement.")
+        # ... your Python code example ...
     </textarea>
 
     <button id="run-button" py-click="run_user_code()">Run Code</button>
@@ -105,7 +53,6 @@ print("This is a simple print statement.")
                 console.error("PyScript execution error:", e)
             finally:
                 sys.stdout = old_stdout
-
     </script>
 </body>
 </html>
