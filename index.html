@@ -1,51 +1,122 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>ANOVA with PyScript</title>
+    <title>Interactive PyScript Code Runner</title>
     <meta charset="utf-8">
     <link rel="stylesheet" href="https://pyscript.net/latest/core.css" />
     <script type="module" src="https://pyscript.net/latest/core.js"></script>
+
+    <style>
+        body { font-family: sans-serif; margin: 20px; }
+        textarea {
+            width: 80%;
+            height: 200px;
+            padding: 10px;
+            font-family: monospace;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover { background-color: #0056b3; }
+        pre {
+            background-color: #f0f0f0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            white-space: pre-wrap; /* Ensures long lines wrap */
+            word-wrap: break-word; /* Ensures long words wrap */
+            margin-top: 20px;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
 
     <py-config>
         packages = ["scipy", "numpy"]
     </py-config>
 </head>
 <body>
-    <h1>ANOVA Test Results</h1>
-    <div id="anova-results">
-        Loading... </div>
+    <h1>Run Your Python Code</h1>
+
+    <p>Enter your Python code below. Use `print()` to see output.</p>
+
+    <textarea id="python-code-input">
+# Example: Run an ANOVA test
+from scipy.stats import f_oneway
+import numpy as np
+
+group_a = np.array([60, 65, 70, 75, 80])
+group_b = np.array([55, 60, 65, 70, 75])
+group_c = np.array([70, 75, 80, 85, 90])
+
+f_statistic, p_value = f_oneway(group_a, group_b, group_c)
+
+print("<h2>ANOVA Test Results:</h2>")
+print(f"<p><strong>Group A Data:</strong> {group_a}</p>")
+print(f"<p><strong>Group B Data:</strong> {group_b}</p>")
+print(f"<p><strong>Group C Data:</strong> {group_c}</p>")
+print(f"<p><strong>F-statistic:</strong> {f_statistic:.2f}</p>")
+print(f"<p><strong>P-value:</strong> {p_value:.3f}</p>")
+
+# Example: Simple print
+print("\nHello from PyScript!")
+print("This is a simple print statement.")
+    </textarea>
+
+    <button id="run-button" py-click="run_user_code()">Run Code</button>
+
+    <h2>Output:</h2>
+    <pre id="output-area">Your results will appear here...</pre>
 
     <script type="py">
-        from scipy.stats import f_oneway
-        import numpy as np
-        from js import document # Import the JavaScript document object
+        import sys
+        from io import StringIO
+        from js import document, console # Import document and console for DOM and logging
 
-        # Sample data for ANOVA
-        group1 = np.array([60, 65, 70, 75, 80])
-        group2 = np.array([55, 60, 65, 70, 75])
-        group3 = np.array([70, 75, 80, 85, 90])
+        def run_user_code():
+            # Get the code from the textarea
+            code_input_element = document.getElementById('python-code-input')
+            user_code = code_input_element.value
 
-        # Perform one-way ANOVA
-        f_statistic, p_value = f_oneway(group1, group2, group3)
+            # Get the output area element
+            output_area = document.getElementById('output-area')
+            output_area.className = "" # Clear any previous error classes
+            output_area.innerHTML = "Running code..." # Show running message
 
-        # Prepare the output HTML string
-        results_html = f"""
-        <h2>ANOVA Test Results</h2>
-        <p><strong>Group 1 Data:</strong> {group1}</p>
-        <p><strong>Group 2 Data:</strong> {group2}</p>
-        <p><strong>Group 3 Data:</strong> {group3}</p>
-        <p><strong>F-statistic:</strong> {f_statistic:.2f}</p>
-        <p><strong>P-value:</strong> {p_value:.3f}</p>
-        """
+            # Redirect stdout to capture print statements
+            old_stdout = sys.stdout
+            redirected_output = StringIO()
+            sys.stdout = redirected_output
 
-        # Get the HTML element by its ID
-        output_div = document.getElementById('anova-results')
+            try:
+                # Execute the user's code
+                # We use exec() to run the string as Python code
+                exec(user_code)
+                captured_output = redirected_output.getvalue()
+                output_area.innerHTML = captured_output # Display captured output
+            except Exception as e:
+                # Catch any errors during execution and display them
+                error_message = f"<span class='error'>Error:</span>\n{e}"
+                output_area.innerHTML = error_message
+                output_area.className = "error" # Add an error class for styling
+                console.error("PyScript execution error:", e) # Also log to console for debugging
+            finally:
+                # Always restore stdout
+                sys.stdout = old_stdout
 
-        # Update the innerHTML of the div with the results
-        output_div.innerHTML = results_html
+            # Ensure any console output from the original print() is flushed
+            # console.log("Code execution finished.")
 
-        # Optional: You can still print to console for debugging, but it's not needed for page display
-        # print(results_html) 
     </script>
 </body>
 </html>
