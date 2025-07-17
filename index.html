@@ -3,8 +3,8 @@
 <head>
     <title>ANOVA with PyScript</title>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="https://pyscript.net/releases/2024.10.1/core.css" />
-    <script type="module" src="https://pyscript.net/releases/2024.10.1/core.js"></script>
+    <link rel="stylesheet" href="https://pyscript.net/latest/core.css" />
+    <script type="module" src="https://pyscript.net/latest/core.js"></script>
 
     <py-config>
         packages = ["scipy", "numpy"]
@@ -13,12 +13,12 @@
 <body>
     <h1>ANOVA Test Results</h1>
     <div id="anova-results">
-        Loading...
-    </div>
+        Loading... </div>
 
-    <script type="py" target="anova-results">
+    <script type="py">
         from scipy.stats import f_oneway
         import numpy as np
+        from js import document # Import the JavaScript document object
 
         # Sample data for ANOVA
         group1 = np.array([60, 65, 70, 75, 80])
@@ -28,8 +28,8 @@
         # Perform one-way ANOVA
         f_statistic, p_value = f_oneway(group1, group2, group3)
 
-        # Display results
-        output = f"""
+        # Prepare the output HTML string
+        results_html = f"""
         <h2>ANOVA Test Results</h2>
         <p><strong>Group 1 Data:</strong> {group1}</p>
         <p><strong>Group 2 Data:</strong> {group2}</p>
@@ -37,10 +37,15 @@
         <p><strong>F-statistic:</strong> {f_statistic:.2f}</p>
         <p><strong>P-value:</strong> {p_value:.3f}</p>
         """
-        # The 'target' attribute in <script type="py" target="anova-results"> will direct output here.
-        # Alternatively, you can use `document.getElementById('anova-results').innerHTML = output`
-        # if the 'target' attribute isn't set or for more complex DOM manipulation.
-        print(output)
+
+        # Get the HTML element by its ID
+        output_div = document.getElementById('anova-results')
+
+        # Update the innerHTML of the div with the results
+        output_div.innerHTML = results_html
+
+        # Optional: You can still print to console for debugging, but it's not needed for page display
+        # print(results_html) 
     </script>
 </body>
 </html>
