@@ -1,58 +1,26 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <title>Interactive PyScript Code Runner</title>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="https://pyscript.net/releases/2024.3.1/core.css" />
-    <script type="module" src="https://pyscript.net/releases/2024.3.1/core.js"></script>
-    <style>
-        /* ... your existing CSS ... */
-    </style>
-
-    <py-config>
-        packages = ["scipy", "numpy"]
-    </py-config>
-</head>
-<body>
-    <h1>Run Your Python Code wwe</h1>
-    <p>Enter your Python code below. Use `print()` to see output.</p>
-    <textarea id="python-code-input">
-        # ... your Python code example ...
-    </textarea>
-
-    <button id="run-button" py-click="run_user_code()">Run Code</button>
-
-    <h2>Output:</h2>
-    <pre id="output-area">Your results will appear here...</pre>
-
-    <script type="py">
-        import sys
-        from io import StringIO
-        from js import document, console
-
-        def run_user_code():
-            code_input_element = document.getElementById('python-code-input')
-            user_code = code_input_element.value
-
-            output_area = document.getElementById('output-area')
-            output_area.className = ""
-            output_area.innerHTML = "Running code..."
-
-            old_stdout = sys.stdout
-            redirected_output = StringIO()
-            sys.stdout = redirected_output
-
-            try:
-                exec(user_code)
-                captured_output = redirected_output.getvalue()
-                output_area.innerHTML = captured_output
-            except Exception as e:
-                error_message = f"<span class='error'>Error:</span>\n{e}"
-                output_area.innerHTML = error_message
-                output_area.className = "error"
-                console.error("PyScript execution error:", e)
-            finally:
-                sys.stdout = old_stdout
-    </script>
-</body>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <title>PyScript 2025.7.3</title>
+        <link rel="stylesheet" href="https://pyscript.net/releases/2025.7.3/core.css" />
+        <script type="module" src="https://pyscript.net/releases/2025.7.3/core.js"></script>
+    </head>
+    <body>
+        <h1>Hello world!</h1>
+        <p>These are the Python interpreters in PyScript 2025.7.3:</p>
+        <script type="py">
+            # Pyodide
+            from pyscript import display
+            import sys
+            display(sys.version)
+        </script>
+        <script type="mpy">
+            # MicroPython
+            from pyscript import display
+            import sys
+            display(sys.version)
+        </script>
+    </body>
 </html>
